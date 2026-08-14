@@ -1,18 +1,28 @@
 import mongoose from 'mongoose';
+import config from './index';
 
-const connectionString = process.env.MONGODB_URI || 'mongodb://localhost:27017/octofit_db';
-const db = mongoose.connection;
-
-mongoose
-  .connect(connectionString)
-  .then(() => {
-    console.log('Connected to octofit_db');
-  })
-  .catch((error) => {
-    console.error('Error connecting to octofit_db:', error);
+export const connectDatabase = async (): Promise<void> => {
+  try {
+    await mongoose.connect(config.MONGODB_URI, {
+      retryWrites: true,
+      w: 'majority',
+    });
+    console.log(`✓ Connected to MongoDB at ${config.MONGODB_URI}`);
+    console.log(`✓ Running in ${config.ENVIRONMENT} environment`);
+    console.log(`✓ Base URL: ${config.BASE_URL}`);
+  } catch (error) {
+    console.error('✗ MongoDB connection failed:', error);
     process.exit(1);
-  });
+  }
+};
 
-db.on('error', console.error.bind(console, 'connection error:'));
+export const disconnectDatabase = async (): Promise<void> => {
+  try {
+    await mongoose.disconnect();
+    console.log('✓ Disconnected from MongoDB');
+  } catch (error) {
+    console.error('✗ MongoDB disconnection error:', error);
+  }
+};
 
-export default db;
+export default mongoose;
