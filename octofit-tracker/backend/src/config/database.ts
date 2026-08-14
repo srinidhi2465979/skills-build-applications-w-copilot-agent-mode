@@ -1,6 +1,9 @@
 import mongoose from 'mongoose';
 import config from './index';
 
+/**
+ * Connect to the octofit_db database
+ */
 export const connectDatabase = async (): Promise<void> => {
   try {
     await mongoose.connect(config.MONGODB_URI, {

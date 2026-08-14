@@ -3,7 +3,7 @@ import { User, Team, Activity, Leaderboard, Workout } from '../models';
 import config from '../config';
 
 /**
- * Seed the octofit_db database with comprehensive test data
+ * Seed the octofit_db database with test data
  */
 async function seedDatabase() {
   try {
